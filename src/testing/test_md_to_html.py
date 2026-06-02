@@ -1,6 +1,6 @@
 import unittest
 
-from src.markdown_to_html import markdown_to_html_node
+from src.markdown_to_html import markdown_to_html_node, extract_title
 
 
 class TestMDToHTML(unittest.TestCase):
@@ -90,3 +90,26 @@ the **same** even with inline stuff
             html,
             "<div><blockquote>quote first line second line of quote</blockquote></div>",
         )
+    
+    def test_extract_title(self):
+        md = "# Hello"
+
+        text = extract_title(md)
+        self.assertEqual(text, "Hello")
+    
+    def test_extract_title_from_middle(self):
+        md = """
+there are somethings happening here
+
+```
+this is a code block
+what is happening
+```
+
+# Hello, my name is Abdo
+
+something here too
+"""
+
+        text = extract_title(md)
+        self.assertEqual(text, "Hello, my name is Abdo")

@@ -1,6 +1,8 @@
 import os 
 import shutil
 
+from .markdown_to_html import markdown_to_html_node, extract_title
+
 def copy_static_to_public(source, dest):
     if not os.listdir(source):
         return
@@ -17,3 +19,32 @@ def copy_static_to_public(source, dest):
             print(f"going to {os.path.join(source, item)}")
             dest_in = os.path.join(dest, item)
             copy_static_to_public(source_in, dest_in)
+
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+
+    if os.path.exists(from_path):
+        with open(from_path, "r") as file:
+            md = file.read()
+    else:
+        raise Exception("No md file to translate")
+
+    with open(template_path, "r") as file: 
+        template = file.read()
+    
+    node = markdown_to_html_node(md)
+    html = node.to_html()
+    title = extract_title(md)
+
+    index_html = template.replace("{{ Title }}", title)
+    index_html = index_html.replace("{{ Content }}", html)
+    
+    dest_dir_path = os.path.dirname(dest_path)
+    if not os.path.exists(dest_dir_path):
+        os.makedirs(dest_dir_path, exist_ok = True)
+
+    with open(dest_path, "w") as file: 
+        file.write(index_html)
+
+
