@@ -1,12 +1,16 @@
-from textnode import TextType, TextNode
+import os
+import shutil
 
+from file_system import copy_static_to_public
 
-
+static_dir = "./static"
+public_dir = "./public"
 
 def main():
-    
-    node = TextNode("Text and stuff", TextType.BOLD, "https://example.com")
-    print(node)
+    if os.path.exists(public_dir):
+        shutil.rmtree(public_dir)
+
+    copy_static_to_public(static_dir, public_dir)
 
 
 main()
