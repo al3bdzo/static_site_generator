@@ -48,3 +48,15 @@ def generate_page(from_path, template_path, dest_path):
         file.write(index_html)
 
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    if not os.listdir(dir_path_content):
+        return 
+    
+    for item in os.listdir(dir_path_content):
+        source = os.path.join(dir_path_content, item)
+        if os.path.isfile(source):
+            dest = os.path.join(dest_dir_path, "index.html")
+            generate_page(source, template_path, dest)
+        else:
+            dest = os.path.join(dest_dir_path, item)
+            generate_pages_recursive(source, template_path, dest)

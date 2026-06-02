@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from .file_system import copy_static_to_public, generate_page
+from .file_system import copy_static_to_public, generate_pages_recursive
 
 static_dir = "./static"
 public_dir = "./public"
@@ -14,10 +14,10 @@ def main():
 
     copy_static_to_public(static_dir, public_dir)
 
-    generate_page(
-        os.path.join(content_dir, "index.md"), 
+    generate_pages_recursive(
+        content_dir,
         template_path, 
-        os.path.join(public_dir, "index.html")
+        public_dir
     )
 
 main()
