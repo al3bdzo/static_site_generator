@@ -14,8 +14,8 @@ def main():
         shutil.rmtree(public_dir)
     
     basepath = "/"
-    if sys.argv[0]:
-        basepath = sys.argv[0]
+    if sys.argv[1]:
+        basepath = sys.argv[1]
 
     copy_static_to_public(static_dir, public_dir)
 
@@ -25,7 +25,5 @@ def main():
         public_dir,
         basepath
     )
-    
-
 
 main()
