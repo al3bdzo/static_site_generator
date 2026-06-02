@@ -21,7 +21,7 @@ def copy_static_to_public(source, dest):
             copy_static_to_public(source_in, dest_in)
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     if os.path.exists(from_path):
@@ -39,6 +39,9 @@ def generate_page(from_path, template_path, dest_path):
 
     index_html = template.replace("{{ Title }}", title)
     index_html = index_html.replace("{{ Content }}", html)
+    index_html = index_html.replace('href="/', f'href="{basepath}')
+    index_html = index_html.replace('src="/', f'src="{basepath}')
+
     
     dest_dir_path = os.path.dirname(dest_path)
     if not os.path.exists(dest_dir_path):
@@ -48,7 +51,7 @@ def generate_page(from_path, template_path, dest_path):
         file.write(index_html)
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     if not os.listdir(dir_path_content):
         return 
     
@@ -56,7 +59,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         source = os.path.join(dir_path_content, item)
         if os.path.isfile(source):
             dest = os.path.join(dest_dir_path, "index.html")
-            generate_page(source, template_path, dest)
+            generate_page(source, template_path, dest, basepath)
         else:
             dest = os.path.join(dest_dir_path, item)
-            generate_pages_recursive(source, template_path, dest)
+            generate_pages_recursive(source, template_path, dest, basepath)
